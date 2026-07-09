@@ -1,48 +1,42 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
-import ReactECharts from "echarts-for-react";
-import type { EChartsOption } from "echarts";
-import { useTheme } from "next-themes";
+import { useEffect, useRef } from "react";
+import ReactEChartsCore from "echarts-for-react/lib/core";
+import * as echarts from "echarts/core";
+import { BarChart, LineChart, PieChart } from "echarts/charts";
+import {
+  DataZoomComponent,
+  GraphicComponent,
+  GridComponent,
+  LegendComponent,
+  MarkPointComponent,
+  TitleComponent,
+  ToolboxComponent,
+  TooltipComponent,
+} from "echarts/components";
+import { CanvasRenderer } from "echarts/renderers";
+import type { EChartsCoreOption } from "echarts/core";
 import { cn } from "@/lib/utils";
 
-const seriesPalette = [
-  "#e89ab8",
-  "#8eb4ff",
-  "#5dcea0",
-  "#e8b86d",
-  "#c4a0ff",
-  "#f07178",
-  "#7dd3c0",
-  "#f0c674",
-  "#81a1c1",
-  "#d08770",
-];
+echarts.use([
+  BarChart,
+  LineChart,
+  PieChart,
+  TitleComponent,
+  TooltipComponent,
+  GridComponent,
+  LegendComponent,
+  ToolboxComponent,
+  DataZoomComponent,
+  GraphicComponent,
+  MarkPointComponent,
+  CanvasRenderer,
+]);
 
-export function useRankChartTheme() {
-  const { resolvedTheme } = useTheme();
-  const isLight = resolvedTheme === "light";
-  return useMemo(
-    () => ({
-      isLight,
-      text: isLight ? "#1a1520" : "rgba(255,255,255,0.78)",
-      muted: isLight ? "rgba(26,21,32,0.5)" : "rgba(255,255,255,0.45)",
-      split: isLight ? "rgba(26,21,32,0.08)" : "rgba(255,255,255,0.06)",
-      axisLine: isLight ? "rgba(26,21,32,0.15)" : "rgba(255,255,255,0.12)",
-      tooltipBg: isLight ? "rgba(255,255,255,0.96)" : "rgba(22,18,28,0.96)",
-      tooltipBorder: isLight
-        ? "rgba(26,21,32,0.12)"
-        : "rgba(255,255,255,0.12)",
-      pink: "#e89ab8",
-      blue: "#8eb4ff",
-      palette: seriesPalette,
-    }),
-    [isLight]
-  );
-}
+export type { EChartsCoreOption as EChartsOption };
 
 type Props = {
-  option: EChartsOption;
+  option: EChartsCoreOption | Record<string, unknown>;
   className?: string;
   height?: number | string;
   loading?: boolean;
@@ -54,7 +48,7 @@ export function RankEChart({
   height = 400,
   loading,
 }: Props) {
-  const ref = useRef<ReactECharts>(null);
+  const ref = useRef<InstanceType<typeof ReactEChartsCore> | null>(null);
 
   useEffect(() => {
     const onResize = () => {
@@ -81,9 +75,10 @@ export function RankEChart({
 
   return (
     <div className={cn("w-full", className)} style={{ height }}>
-      <ReactECharts
+      <ReactEChartsCore
         ref={ref}
-        option={option}
+        echarts={echarts}
+        option={option as EChartsCoreOption}
         notMerge
         lazyUpdate
         style={{ height: "100%", width: "100%" }}
@@ -91,9 +86,4 @@ export function RankEChart({
       />
     </div>
   );
-}
-
-export function breakLongWords(value: string, max = 12): string {
-  if (!value || value.length <= max) return value;
-  return `${value.slice(0, max)}…`;
 }

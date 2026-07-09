@@ -58,7 +58,6 @@
     "react-easy-crop": "^6.2.2",
     "react-hook-form": "^7.81.0",
     "react-markdown": "^10.1.0",
-    "recharts": "^3.9.2",
     "rehype-katex": "^7.0.1",
     "rehype-raw": "^7.0.0",
     "remark-gfm": "^4.0.1",

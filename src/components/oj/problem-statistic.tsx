@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import type { EChartsOption } from "echarts";
 import { GlassCard } from "@/components/glass/glass-card";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +10,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { RankEChart, useRankChartTheme } from "@/components/oj/rank-echart";
+import {
+  RankEChart,
+  useRankChartTheme,
+  type EChartsOption,
+} from "@/components/oj/rank-echart-dynamic";
 import { JUDGE_STATUS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 

@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
-import type { EChartsOption } from "echarts";
 import { GlassPanel } from "@/components/glass/glass-card";
 import { Pagination } from "@/components/oj/pagination";
 import { Loading } from "@/components/oj/loading";
@@ -10,7 +9,8 @@ import {
   RankEChart,
   breakLongWords,
   useRankChartTheme,
-} from "@/components/oj/rank-echart";
+  type EChartsOption,
+} from "@/components/oj/rank-echart-dynamic";
 import { Link } from "@/i18n/navigation";
 import ojApi from "@/lib/api/oj";
 import { getACRate } from "@/lib/utils";

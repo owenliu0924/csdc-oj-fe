@@ -21,7 +21,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { ChevronDown, Copy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { springSoft } from "@/lib/motion";
-import { ProblemStatistic } from "@/components/oj/problem-statistic";
+import { ProblemStatistic } from "@/components/oj/problem-statistic-dynamic";
 
 type Problem = {
   id: number;
