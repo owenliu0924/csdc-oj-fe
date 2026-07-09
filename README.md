@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# csdc-oj-fe
 
-## Getting Started
+Modern OnlineJudge frontend for [QingdaoU/OnlineJudge](https://github.com/QingdaoU/OnlineJudge), rewritten with:
 
-First, run the development server:
+- **Next.js** (App Router)
+- **Tailwind CSS** + **shadcn-style** UI
+- **lucide-react** icons
+- **next-intl** (繁體中文 / English)
+- Dark **glassmorphism** design
+
+Full feature parity with the classic Vue OnlineJudgeFE (OJ site + Admin).
+
+## Setup
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+cp .env.local.example .env.local   # or edit .env.local
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) (defaults to `/zh-TW`).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Variable | Description |
+|----------|-------------|
+| `OJ_BACKEND_URL` | OnlineJudge backend base URL (default `http://127.0.0.1:8080`) |
+| `NEXT_PUBLIC_APP_NAME` | Display name fallback |
 
-## Learn More
+API requests to `/api/*` and `/public/*` are proxied to the backend via `next.config.ts`.
 
-To learn more about Next.js, take a look at the following resources:
+## Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm dev      # development
+pnpm build    # production build
+pnpm start    # start production server
+pnpm lint     # eslint
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Structure
 
-## Deploy on Vercel
+```
+src/
+  app/[locale]/(oj)/     # Public OJ pages
+  app/[locale]/admin/    # Admin panel
+  components/            # UI, glass, editors, layout
+  lib/api/               # OJ + Admin API clients
+  stores/                # Zustand (user, website, contest, auth modal)
+  i18n/                  # next-intl routing
+messages/                # zh-TW.json, en.json
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Features
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### OJ
+Home, problems, submissions, contests (ACM/OI rank, helper), user ranks, settings (profile / account / security / TFA), password reset, about, FAQ.
+
+### Admin
+Dashboard, users (import/generate), announcements, system config (SMTP + website), judge servers, prune test cases, problem CRUD (SPJ, test case upload), import/export, contests + contest problems/announcements.
+
+## License
+
+MIT (same spirit as OnlineJudgeFE)
