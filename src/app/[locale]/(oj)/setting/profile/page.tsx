@@ -4,6 +4,7 @@ import { useCallback, useState } from "react";
 import { useTranslations } from "next-intl";
 import Cropper, { type Area } from "react-easy-crop";
 import { toast } from "sonner";
+import { ZoomIn, ZoomOut } from "lucide-react";
 import { GlassPanel } from "@/components/glass/glass-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -120,8 +121,8 @@ export default function ProfileSettingPage() {
           </label>
 
         ) : (
-          <div className="space-y-3">
-            <div className="relative h-64 w-full overflow-hidden rounded-xl bg-black/40">
+          <div className="space-y-4">
+            <div className="relative h-64 w-full overflow-hidden rounded-xl border border-white/10 bg-black/40">
               <Cropper
                 image={imgSrc}
                 crop={crop}
@@ -130,29 +131,58 @@ export default function ProfileSettingPage() {
                 onCropChange={setCrop}
                 onZoomChange={setZoom}
                 onCropComplete={onCropComplete}
+                showGrid={false}
+                style={{
+                  containerStyle: {
+                    borderRadius: "0.75rem",
+                  },
+                }}
               />
             </div>
 
-            <input
-              type="range"
-              min={1}
-              max={3}
-              step={0.05}
-              value={zoom}
-              onChange={(e) => setZoom(Number(e.target.value))}
-              className="w-full"
-            />
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-xs text-[var(--muted)]">
+                <span>Zoom</span>
+                <span className="tabular-nums text-[var(--fg-secondary)]">
+                  {zoom.toFixed(2)}×
+                </span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <button
+                  type="button"
+                  aria-label="Zoom out"
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[var(--glass-border)] text-[var(--muted)] transition-colors hover:bg-[var(--glass-hover-bg)] hover:text-foreground"
+                  onClick={() => setZoom((z) => Math.max(1, +(z - 0.1).toFixed(2)))}
+                >
+                  <ZoomOut className="h-3.5 w-3.5" />
+                </button>
+                <input
+                  type="range"
+                  min={1}
+                  max={3}
+                  step={0.05}
+                  value={zoom}
+                  onChange={(e) => setZoom(Number(e.target.value))}
+                  className="appearance-slider w-full"
+                />
+                <button
+                  type="button"
+                  aria-label="Zoom in"
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-[var(--glass-border)] text-[var(--muted)] transition-colors hover:bg-[var(--glass-hover-bg)] hover:text-foreground"
+                  onClick={() => setZoom((z) => Math.min(3, +(z + 0.1).toFixed(2)))}
+                >
+                  <ZoomIn className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </div>
+
             <div className="flex gap-2">
               <Button variant="secondary" onClick={() => setImgSrc(null)}>
                 {t("Cancel")}
               </Button>
-
               <Button onClick={uploadAvatar}>{t("Save")}</Button>
-
             </div>
-
           </div>
-
         )}
       </GlassPanel>
 

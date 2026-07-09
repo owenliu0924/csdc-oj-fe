@@ -3,22 +3,20 @@
 Modern OnlineJudge frontend for [QingdaoU/OnlineJudge](https://github.com/QingdaoU/OnlineJudge), rewritten with:
 
 - **Next.js** (App Router)
-- **Tailwind CSS** + **shadcn-style** UI
+- **Tailwind CSS** + **shadcn/ui**
 - **lucide-react** icons
-- **next-intl** (繁體中文 / English)
-- Dark **glassmorphism** design
+- **next-intl**
+- **Glassmorphism** design
 
 Full feature parity with the classic Vue OnlineJudgeFE (OJ site + Admin).
 
-## Setup
+## Installation
 
 ```bash
 pnpm install
-cp .env.local.example .env.local   # or edit .env.local
+cp .env.local.example .env.local
 pnpm dev
 ```
-
-Open [http://localhost:3000](http://localhost:3000) (defaults to `/zh-TW`).
 
 ### Environment
 
@@ -51,14 +49,6 @@ src/
 messages/                # zh-TW.json, en.json
 ```
 
-## Features
-
-### OJ
-Home, problems, submissions, contests (ACM/OI rank, helper), user ranks, settings (profile / account / security / TFA), password reset, about, FAQ.
-
-### Admin
-Dashboard, users (import/generate), announcements, system config (SMTP + website), judge servers, prune test cases, problem CRUD (SPJ, test case upload), import/export, contests + contest problems/announcements.
-
 ## License
 
-MIT (same spirit as OnlineJudgeFE)
+This project is licensed under the MIT license.
