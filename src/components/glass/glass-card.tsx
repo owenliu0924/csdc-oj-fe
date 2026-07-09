@@ -15,7 +15,7 @@ export function GlassCard({
   return (
     <div
       className={cn(
-        "glass w-full min-w-0 max-w-full rounded-[var(--radius-lg)]",
+        "glass rounded-[var(--radius-lg)]",
         padding && "p-5 sm:p-6",
         className
       )}
@@ -38,31 +38,22 @@ export function GlassPanel({
   className?: string;
 }) {
   return (
-    <div
-      className={cn(
-        "glass flex w-full min-w-0 max-w-full flex-col overflow-hidden rounded-[var(--radius-lg)]",
-        className
-      )}
-    >
+    <div className={cn("glass overflow-x-clip rounded-[var(--radius-lg)]", className)}>
       {(title || extra) && (
-        <div className="flex min-w-0 shrink-0 items-center gap-3 border-b border-[var(--glass-border)] px-4 py-3 sm:px-6 sm:py-3.5">
-          {title != null && title !== false ? (
-            <div className="shrink-0 text-sm font-medium tracking-tight text-foreground">
-              {title}
-            </div>
-          ) : null}
+        <div className="flex items-center justify-between gap-3 border-b border-[var(--glass-border)] px-5 py-3.5 sm:px-6">
+          <div className="shrink-0 text-sm font-medium tracking-tight text-foreground">
+            {title}
+          </div>
           {extra ? (
-            <div className="min-w-0 flex-1 overflow-x-auto overscroll-x-contain [-webkit-overflow-scrolling:touch] [scrollbar-width:thin]">
-              <div className="inline-flex min-w-full items-center justify-end gap-2">
+            <div className="min-w-0 max-sm:max-w-[min(100%,calc(100%-5.5rem))] max-sm:overflow-x-auto max-sm:overscroll-x-contain sm:shrink-0">
+              <div className="flex items-center gap-2 max-sm:w-max">
                 {extra}
               </div>
             </div>
           ) : null}
         </div>
       )}
-      <div className="min-w-0 max-w-full overflow-x-auto p-4 sm:p-5 sm:px-6">
-        {children}
-      </div>
+      <div className="overflow-x-auto p-5 sm:p-6">{children}</div>
     </div>
   );
 }

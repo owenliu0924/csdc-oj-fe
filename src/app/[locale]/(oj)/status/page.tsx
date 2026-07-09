@@ -82,41 +82,51 @@ function StatusPageInner() {
     <GlassPanel
       title={t("Submissions")}
       extra={
-        <div className="flex flex-nowrap items-center gap-2">
+        <>
           {isAuth() && (
-            <label className="flex items-center gap-2 text-xs text-muted">
-              <Switch checked={myself} onCheckedChange={(v) => { setMyself(v); setPage(1); }} />
+            <label className="flex shrink-0 items-center gap-2 text-xs text-muted">
+              <Switch
+                checked={myself}
+                onCheckedChange={(v) => {
+                  setMyself(v);
+                  setPage(1);
+                }}
+              />
               {t("Mine")}
             </label>
-
           )}
           <Input
-            className="w-32"
+            className="w-32 shrink-0"
             placeholder={t("Search_Author")}
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && (setPage(1), load())}
           />
           <Input
-            className="w-28"
+            className="w-28 shrink-0"
             placeholder={t("ProblemID")}
             value={problem}
             onChange={(e) => setProblem(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && (setPage(1), load())}
           />
-          <Button variant="secondary" size="sm" onClick={() => { setPage(1); load(); }}>
+          <Button
+            variant="secondary"
+            size="sm"
+            className="shrink-0"
+            onClick={() => {
+              setPage(1);
+              load();
+            }}
+          >
             <Search className="h-3.5 w-3.5" />
           </Button>
-
-        </div>
-
+        </>
       }
     >
       {loading ? (
         <Loading />
       ) : (
-        <div className="min-w-0 max-w-full">
-          <table className="w-full min-w-[48rem] text-sm">
+        <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-white/10 text-left text-muted">
                 <th className="pb-3 pr-3 font-medium">{t("When")}</th>
@@ -191,11 +201,7 @@ function StatusPageInner() {
 
               ))}
             </tbody>
-
           </table>
-
-        </div>
-
       )}
       <Pagination
         total={total}

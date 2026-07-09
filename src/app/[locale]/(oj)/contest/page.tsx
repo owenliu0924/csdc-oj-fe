@@ -64,7 +64,7 @@ export default function ContestListPage() {
     <GlassPanel
       title={t("Contests")}
       extra={
-        <div className="flex flex-nowrap gap-2">
+        <>
           {[
             { v: "", l: t("All") },
             { v: CONTEST_STATUS.UNDERWAY, l: t("Underway") },
@@ -74,6 +74,7 @@ export default function ContestListPage() {
             <Button
               key={o.v || "all"}
               size="sm"
+              className="shrink-0"
               variant={status === o.v ? "default" : "secondary"}
               onClick={() => {
                 setStatus(o.v);
@@ -82,7 +83,6 @@ export default function ContestListPage() {
             >
               {o.l}
             </Button>
-
           ))}
           {[
             { v: "", l: t("All") },
@@ -92,6 +92,7 @@ export default function ContestListPage() {
             <Button
               key={`r-${o.v || "all"}`}
               size="sm"
+              className="shrink-0"
               variant={rule === o.v ? "default" : "outline"}
               onClick={() => {
                 setRule(o.v);
@@ -100,10 +101,8 @@ export default function ContestListPage() {
             >
               {o.l}
             </Button>
-
           ))}
-        </div>
-
+        </>
       }
     >
       {loading ? (

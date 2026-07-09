@@ -9,13 +9,12 @@ export function PageTransition({ children }: { children: React.ReactNode }) {
   const reduce = useReducedMotion();
 
   if (reduce) {
-    return <div className="min-w-0 max-w-full w-full">{children}</div>;
+    return <>{children}</>;
   }
 
   return (
     <motion.div
       key={pathname}
-      className="min-w-0 max-w-full w-full"
       initial={{ y: 10 }}
       animate={{ y: 0 }}
       transition={pageTransition}
