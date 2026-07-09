@@ -72,7 +72,7 @@ export function Navbar() {
       initial={reduce ? false : "initial"}
       animate="animate"
     >
-      <div className="glass-nav mx-auto flex h-[52px] max-w-6xl items-center gap-1 rounded-[var(--radius-xl)] px-3 sm:px-4">
+      <div className="glass-nav mx-auto flex h-[52px] w-full min-w-0 max-w-6xl items-center gap-1 overflow-hidden rounded-[var(--radius-xl)] px-3 sm:px-4">
         <Link
           href="/"
           className="mr-2 shrink-0 px-1.5 text-[15px] font-semibold tracking-tight text-white transition-opacity hover:opacity-90 sm:mr-3"

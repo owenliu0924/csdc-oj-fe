@@ -95,7 +95,9 @@
 
 html {
   background: none;
+  overflow-x: clip;
   overflow-y: scroll;
+  max-width: 100%;
 }
 
 :root {
@@ -110,6 +112,8 @@ html {
 body {
   color: var(--foreground);
   min-height: 100vh;
+  max-width: 100%;
+  overflow-x: clip;
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -175,7 +179,17 @@ html.no-glass, html.no-glass body {
   z-index: 1;
   background: none;
   min-height: 100vh;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: clip;
   position: relative;
+}
+
+/* Prevent tables/long flex rows from expanding the page (grid/flex min-width:auto) */
+.app-root main,
+.app-root .page-shell {
+  min-width: 0;
+  max-width: 100%;
 }
 
 .dark, :root {

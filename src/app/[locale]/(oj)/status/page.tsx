@@ -82,7 +82,7 @@ function StatusPageInner() {
     <GlassPanel
       title={t("Submissions")}
       extra={
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-nowrap items-center gap-2">
           {isAuth() && (
             <label className="flex items-center gap-2 text-xs text-muted">
               <Switch checked={myself} onCheckedChange={(v) => { setMyself(v); setPage(1); }} />
@@ -115,8 +115,8 @@ function StatusPageInner() {
       {loading ? (
         <Loading />
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+        <div className="min-w-0 max-w-full">
+          <table className="w-full min-w-[48rem] text-sm">
             <thead>
               <tr className="border-b border-white/10 text-left text-muted">
                 <th className="pb-3 pr-3 font-medium">{t("When")}</th>

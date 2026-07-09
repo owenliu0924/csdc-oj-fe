@@ -178,7 +178,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <div className="flex min-h-screen gap-3 p-3 sm:p-4">
+    <div className="page-shell flex min-h-screen min-w-0 max-w-full gap-3 overflow-x-clip p-3 sm:p-4">
 
       <motion.aside
         className="glass-sidebar hidden w-56 shrink-0 rounded-[var(--radius-xl)] lg:flex lg:flex-col"
@@ -260,7 +260,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
 
         </motion.header>
 
-        <main className="flex-1 min-h-0 overflow-auto pb-4">
+        <main className="min-h-0 min-w-0 max-w-full flex-1 overflow-x-auto overflow-y-auto pb-4">
           <PageTransition>{children}</PageTransition>
 
         </main>

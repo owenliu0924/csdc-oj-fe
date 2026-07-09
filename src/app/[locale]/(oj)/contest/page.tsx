@@ -64,7 +64,7 @@ export default function ContestListPage() {
     <GlassPanel
       title={t("Contests")}
       extra={
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-nowrap gap-2">
           {[
             { v: "", l: t("All") },
             { v: CONTEST_STATUS.UNDERWAY, l: t("Underway") },

@@ -107,12 +107,12 @@ function ProblemListInner() {
   };
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[1fr_240px]">
-      <div>
+    <div className="grid min-w-0 max-w-full gap-4 lg:grid-cols-[minmax(0,1fr)_240px]">
+      <div className="min-w-0 max-w-full">
         <GlassPanel
           title={t("Problem_List")}
           extra={
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-nowrap items-center gap-2">
               <Select
                 value={difficulty || "all"}
                 onValueChange={(v) => {
@@ -179,8 +179,8 @@ function ProblemListInner() {
           {loading ? (
             <Loading />
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
+            <div className="min-w-0 max-w-full">
+              <table className="w-full min-w-[36rem] text-sm">
                 <thead>
                   <tr className="border-b border-white/10 text-left text-muted">
                     <th className="pb-3 pr-3 font-medium w-16">#</th>
@@ -294,10 +294,9 @@ function ProblemListInner() {
             }}
           />
         </GlassPanel>
-
       </div>
 
-      <div className="space-y-4">
+      <div className="min-w-0 max-w-full space-y-4">
         <GlassCard>
           <h3 className="mb-3 text-sm font-semibold">{t("Tags")}</h3>
 
