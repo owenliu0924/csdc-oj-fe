@@ -178,6 +178,20 @@ html.no-glass, html.no-glass body {
   position: relative;
 }
 
+/* Contest rank cells — match classic OJ first-AC / AC / WA colors */
+.rank-cell-first-ac {
+  background-color: rgba(51, 204, 153, 0.35);
+  color: #9ef0c8;
+}
+.rank-cell-ac {
+  background-color: rgba(93, 206, 160, 0.22);
+  color: var(--success);
+}
+.rank-cell-wa {
+  background-color: rgba(240, 113, 120, 0.18);
+  color: var(--danger);
+}
+
 .dark, :root {
   --glass-1: rgba(12, 10, 14, var(--user-glass-alpha));
   --glass-2: rgba(14, 12, 16, calc(var(--user-glass-alpha) + .08));
