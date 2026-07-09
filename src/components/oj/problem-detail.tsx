@@ -21,6 +21,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { ChevronDown, Copy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { springSoft } from "@/lib/motion";
+import { ProblemStatistic } from "@/components/oj/problem-statistic";
 
 type Problem = {
   id: number;
@@ -40,6 +41,8 @@ type Problem = {
   template?: Record<string, string>;
   my_status?: number;
   statistic_info?: Record<string, number>;
+  accepted_number?: number;
+  submission_number?: number;
   created_by?: { username: string };
   io_mode?: { io_mode: string; input?: string; output?: string };
   spj?: boolean;
@@ -334,25 +337,17 @@ export function ProblemDetail({ problemID, contestID }: Props) {
       <div className="space-y-4">
         <GlassCard>
           <h3 className="mb-3 text-sm font-semibold">{t("Information")}</h3>
-
           <dl className="space-y-2 text-sm">
             <div className="flex justify-between gap-2">
               <dt className="text-muted">{t("Time_Limit")}</dt>
-
               <dd>{problem.time_limit} ms</dd>
-
             </div>
-
             <div className="flex justify-between gap-2">
               <dt className="text-muted">{t("Memory_Limit")}</dt>
-
               <dd>{problem.memory_limit} MB</dd>
-
             </div>
-
             <div className="flex justify-between gap-2">
               <dt className="text-muted">{t("Level")}</dt>
-
               <dd>
                 <Badge
                   variant={
@@ -365,44 +360,39 @@ export function ProblemDetail({ problemID, contestID }: Props) {
                 >
                   {problem.difficulty}
                 </Badge>
-
               </dd>
-
             </div>
-
             {problem.created_by && (
               <div className="flex justify-between gap-2">
                 <dt className="text-muted">{t("Created")}</dt>
-
                 <dd>{problem.created_by.username}</dd>
-
               </div>
-
             )}
           </dl>
-
           {problem.tags?.length > 0 && (
             <div className="mt-4">
               <p className="mb-2 text-xs text-muted">{t("Tags")}</p>
-
               <div className="flex flex-wrap gap-1">
                 {problem.tags.map((tag) => (
                   <Badge key={tag} variant="secondary">
                     {tag}
                   </Badge>
-
                 ))}
               </div>
-
             </div>
-
           )}
           {statusInfo && (
             <p className="mt-3 text-xs text-muted">{statusInfo.name}</p>
-
           )}
         </GlassCard>
 
+        {(!contestID || oiRealtime()) && (
+          <ProblemStatistic
+            statisticInfo={problem.statistic_info}
+            acceptedNumber={problem.accepted_number}
+            submissionNumber={problem.submission_number}
+          />
+        )}
       </div>
 
     </div>
