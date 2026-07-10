@@ -560,6 +560,20 @@ html.no-glass .glass, html.no-glass .glass-nav, html.no-glass .glass-sidebar, ht
   max-width: 100%;
 }
 
+/* KaTeX (problem descriptions, announcements) */
+.markdown-body .katex {
+  font-size: 1.05em;
+  color: inherit;
+}
+.markdown-body .katex-display {
+  margin: 0.85em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.markdown-body .katex-error {
+  color: #f87171;
+}
+
 /* TipTap rich editor surface */
 .rich-editor-prose {
   min-height: var(--rte-min-h, 160px);
