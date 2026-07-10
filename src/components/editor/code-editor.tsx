@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { RotateCcw, Upload } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRef } from "react";
+import { useTheme } from "next-themes";
 
 function langExtension(language: string) {
   const l = language.toLowerCase();
@@ -46,6 +47,7 @@ export function CodeEditor({
 }: Props) {
   const t = useTranslations("m");
   const fileRef = useRef<HTMLInputElement>(null);
+  const { resolvedTheme } = useTheme();
 
   return (
     <div className="space-y-3">
@@ -60,10 +62,8 @@ export function CodeEditor({
               <SelectItem key={l} value={l}>
                 {l}
               </SelectItem>
-
             ))}
           </SelectContent>
-
         </Select>
 
         {onReset && (
@@ -71,7 +71,6 @@ export function CodeEditor({
             <RotateCcw className="h-3.5 w-3.5" />
             {t("Reset_to_default_code_definition")}
           </Button>
-
         )}
         <Button
           variant="secondary"
@@ -96,11 +95,11 @@ export function CodeEditor({
         />
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-white/[0.12] shadow-[0_1px_0_0_rgba(255,255,255,0.05)_inset]">
+      <div className="overflow-hidden rounded-2xl border border-[var(--glass-border)] dark:shadow-[0_1px_0_0_rgba(255,255,255,0.05)_inset]">
         <CodeMirror
           value={value}
           height="360px"
-          theme={oneDark}
+          theme={resolvedTheme === "dark" ? oneDark : "light"}
           extensions={[langExtension(language), EditorView.lineWrapping]}
           onChange={onChange}
           basicSetup={{
@@ -110,8 +109,6 @@ export function CodeEditor({
           }}
         />
       </div>
-
     </div>
-
   );
 }
