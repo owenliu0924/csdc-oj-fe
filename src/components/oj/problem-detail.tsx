@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { GlassPanel, GlassCard } from "@/components/glass/glass-card";
@@ -401,53 +401,97 @@ export function ProblemDetail({ problemID, contestID }: Props) {
 }
 
 function HintSection({ title, html }: { title: string; html: string }) {
-  const [open, setOpen] = useState(false);
+  const hints = useMemo(() => {
+    return html.split(/<hr\s*\/?>|---/).map((s) => s.trim()).filter(Boolean);
+  }, [html]);
+
+  const [unlockedCount, setUnlockedCount] = useState(0);
+  const [openHints, setOpenHints] = useState<Set<number>>(new Set());
+
+  const toggleHint = (index: number) => {
+    if (index > unlockedCount) return;
+
+    if (index === unlockedCount) {
+      setUnlockedCount(index + 1);
+      setOpenHints((prev) => {
+        const next = new Set(prev);
+        next.add(index);
+        return next;
+      });
+    } else {
+      setOpenHints((prev) => {
+        const next = new Set(prev);
+        if (next.has(index)) {
+          next.delete(index);
+        } else {
+          next.add(index);
+        }
+        return next;
+      });
+    }
+  };
+
+  const hasMultiple = hints.length > 1;
 
   return (
-    <section>
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className={cn(
-          "flex w-full items-center justify-between gap-2 rounded-xl border px-3.5 py-2.5 text-left transition-colors",
-          open
-            ? "border-[var(--pink)]/30 bg-[var(--pink-soft)]"
-            : "border-white/10 bg-white/[0.03] hover:bg-white/[0.06]"
-        )}
-        aria-expanded={open}
-      >
-        <span className="text-sm font-medium text-[var(--pink-bright)]">
-          {title}
-        </span>
+    <div className="space-y-3">
+      {hints.map((hintHtml, index) => {
+        const isDisabled = index > unlockedCount;
+        const isOpen = openHints.has(index);
+        const currentTitle = hasMultiple ? `${title} ${index + 1}` : title;
 
-        <ChevronDown
-          className={cn(
-            "h-4 w-4 shrink-0 text-[var(--muted)] transition-transform duration-200",
-            open && "rotate-180"
-          )}
-        />
-      </button>
+        return (
+          <section key={index} className={isDisabled ? "opacity-50" : ""}>
+            <button
+              type="button"
+              disabled={isDisabled}
+              onClick={() => toggleHint(index)}
+              className={cn(
+                "flex w-full items-center justify-between gap-2 rounded-xl border px-3.5 py-2.5 text-left transition-colors",
+                isOpen
+                  ? "border-[var(--pink)]/30 bg-[var(--pink-soft)]"
+                  : "border-white/10 bg-white/[0.03]",
+                !isDisabled && !isOpen && "hover:bg-white/[0.06]",
+                isDisabled && "cursor-not-allowed"
+              )}
+              aria-expanded={isOpen}
+            >
+              <span className="text-sm font-medium text-[var(--pink-bright)]">
+                {currentTitle}
+              </span>
 
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            key="hint"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={springSoft}
-            className="overflow-hidden"
-          >
-            <div className="mt-2 rounded-xl border border-white/10 bg-black/20 p-4">
-              <HtmlContent html={html} />
-            </div>
+              <ChevronDown
+                className={cn(
+                  "h-4 w-4 shrink-0 text-[var(--muted)] transition-transform duration-200",
+                  isOpen && "rotate-180"
+                )}
+              />
+            </button>
 
-          </motion.div>
+            <AnimatePresence initial={false}>
+              {isOpen && (
+                <motion.div
+                  key="hint-content"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={springSoft}
+                  className="overflow-hidden"
+                >
+                  <div className="mt-2 rounded-xl border border-white/10 bg-black/20 p-4">
+                    <HtmlContent html={hintHtml} />
+                  </div>
 
-        )}
-      </AnimatePresence>
+                </motion.div>
 
-    </section>
+              )}
+            </AnimatePresence>
+
+          </section>
+
+        );
+      })}
+    </div>
 
   );
 }
