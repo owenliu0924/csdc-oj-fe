@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: process.env.NEXT_PUBLIC_APP_NAME || "CSDC OJ",
-  description: "Online Judge — Pink Glass Desktop",
+  description: "新竹高中軟研社 Online Judge",
 };
 
 export default async function RootLayout({
