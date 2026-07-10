@@ -2,9 +2,11 @@
 
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import { cn } from "@/lib/utils";
+import "katex/dist/katex.min.css";
 
 export function MarkdownView({
   content,
@@ -17,7 +19,7 @@ export function MarkdownView({
   return (
     <div className={cn("markdown-body", className)}>
       <ReactMarkdown
-        remarkPlugins={[remarkGfm]}
+        remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[rehypeRaw, rehypeKatex]}
       >
         {content}
@@ -37,14 +39,5 @@ export function HtmlContent({
 }) {
   if (!html) return null;
 
-  const looksHtml = /<\/?[a-z][\s\S]*>/i.test(html);
-  if (!looksHtml) {
-    return <MarkdownView content={html} className={className} />;
-  }
-  return (
-    <div
-      className={cn("markdown-body", className)}
-      dangerouslySetInnerHTML={{ __html: html }}
-    />
-  );
+  return <MarkdownView content={html} className={className} />;
 }
