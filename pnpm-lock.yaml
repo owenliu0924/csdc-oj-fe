@@ -83,9 +83,45 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.2.12
         version: 1.2.12(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@tiptap/extension-color':
+        specifier: ^3.27.3
+        version: 3.27.3(@tiptap/extension-text-style@3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3)))
+      '@tiptap/extension-highlight':
+        specifier: ^3.27.3
+        version: 3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))
+      '@tiptap/extension-image':
+        specifier: ^3.27.3
+        version: 3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))
+      '@tiptap/extension-link':
+        specifier: ^3.27.3
+        version: 3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))(@tiptap/pm@3.27.3)
       '@tiptap/extension-placeholder':
         specifier: ^3.27.3
         version: 3.27.3(@tiptap/extensions@3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))(@tiptap/pm@3.27.3))
+      '@tiptap/extension-table':
+        specifier: ^3.27.3
+        version: 3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))(@tiptap/pm@3.27.3)
+      '@tiptap/extension-table-cell':
+        specifier: ^3.27.3
+        version: 3.27.3(@tiptap/extension-table@3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))(@tiptap/pm@3.27.3))
+      '@tiptap/extension-table-header':
+        specifier: ^3.27.3
+        version: 3.27.3(@tiptap/extension-table@3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))(@tiptap/pm@3.27.3))
+      '@tiptap/extension-table-row':
+        specifier: ^3.27.3
+        version: 3.27.3(@tiptap/extension-table@3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))(@tiptap/pm@3.27.3))
+      '@tiptap/extension-text-align':
+        specifier: ^3.27.3
+        version: 3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))
+      '@tiptap/extension-text-style':
+        specifier: ^3.27.3
+        version: 3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))
+      '@tiptap/extension-underline':
+        specifier: ^3.27.3
+        version: 3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))
+      '@tiptap/pm':
+        specifier: ^3.27.3
+        version: 3.27.3
       '@tiptap/react':
         specifier: ^3.27.3
         version: 3.27.3(@floating-ui/dom@1.7.6)(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))(@tiptap/pm@3.27.3)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -164,6 +200,9 @@ importers:
       remark-gfm:
         specifier: ^4.0.1
         version: 4.0.1
+      remark-math:
+        specifier: ^6.0.0
+        version: 6.0.0
       sonner:
         specifier: ^2.0.7
         version: 2.0.7(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
@@ -1441,6 +1480,11 @@ packages:
     peerDependencies:
       '@tiptap/core': 3.27.3
 
+  '@tiptap/extension-color@3.27.3':
+    resolution: {integrity: sha512-tNXyK3VXPGygJP+vq1+YyPmrxLabx4vs+rYiVhGtmhIapTQeMVYcHbFH4s4v3h5m8JGVlTWnpI8n7cb5ExIhSQ==}
+    peerDependencies:
+      '@tiptap/extension-text-style': 3.27.3
+
   '@tiptap/extension-document@3.27.3':
     resolution: {integrity: sha512-PR25MRv56Nm4ETVLwA8nAh/0RrVdvD4D2nxnAC8kUkxz1WOYDaqTfPqqEeSWDoUUTUp1I1xzDkD4x0gEnAlmZA==}
     peerDependencies:
@@ -1473,11 +1517,21 @@ packages:
     peerDependencies:
       '@tiptap/core': 3.27.3
 
+  '@tiptap/extension-highlight@3.27.3':
+    resolution: {integrity: sha512-99QYxMx8F/NhdvznM8/Zhm4XiCdMU0OEiLwPvLNObJiKV8UBqjdA68cJLX6FRuOi2nqD7xfJq2KuSsFKBldi2A==}
+    peerDependencies:
+      '@tiptap/core': 3.27.3
+
   '@tiptap/extension-horizontal-rule@3.27.3':
     resolution: {integrity: sha512-sNCuo0+Q001B5XTVWY+ULpWXQqtBNRmAqXxAexZl44bx3rDqHG8OzjwT4EM0LIj2+BYVbdqwaJ1vfQbZVEEbig==}
     peerDependencies:
       '@tiptap/core': 3.27.3
       '@tiptap/pm': 3.27.3
+
+  '@tiptap/extension-image@3.27.3':
+    resolution: {integrity: sha512-3OVLRH54Xkh9yrI5oGIempuqZkhLG1plyJBRnapx0N8j9IjEImOLF78kPYoAZzaBuU78M3Zk/E7HQZgmnaNRBg==}
+    peerDependencies:
+      '@tiptap/core': 3.27.3
 
   '@tiptap/extension-italic@3.27.3':
     resolution: {integrity: sha512-7VpVi2vn8kGFAc/HLrt96J/E6+LXOGKn8xLhJS863t150yLIG3EPQLA1h+G5O6eo+/w+9YokvJAAJoeDihj1Jg==}
@@ -1523,6 +1577,37 @@ packages:
 
   '@tiptap/extension-strike@3.27.3':
     resolution: {integrity: sha512-dp6Rs3I4zLVJPvAw2Q9yrNuYKcX5LTONH3/oyULvGsrqq5DKz7pqscfwhwnDSzrgm/3aCz6B9r1BVHlYI/DXlA==}
+    peerDependencies:
+      '@tiptap/core': 3.27.3
+
+  '@tiptap/extension-table-cell@3.27.3':
+    resolution: {integrity: sha512-W8onBLgjge3D2PlYetbPC/BvwH5jgYfL9PLqMurfCPD7t8fyU4s+4E3SwbZkuf6eCH0twBjqyapH7+sOW/sPhA==}
+    peerDependencies:
+      '@tiptap/extension-table': 3.27.3
+
+  '@tiptap/extension-table-header@3.27.3':
+    resolution: {integrity: sha512-8iBOxh0S1Wh5VC1rmVTZVJKanGhJpZd5E5O7Pycf+KKUu+BcWQZ17ewj3+VVSdU76sDCUWIjQE0qJ/EyI1vZeg==}
+    peerDependencies:
+      '@tiptap/extension-table': 3.27.3
+
+  '@tiptap/extension-table-row@3.27.3':
+    resolution: {integrity: sha512-AFMVQI+1kRh97++g+NA6MjATpwQPvjar4JUyaGlnSBIt+b5sYLTW3qQS8EzpMbKPqUp7uZOX9EkLgpvepWYSow==}
+    peerDependencies:
+      '@tiptap/extension-table': 3.27.3
+
+  '@tiptap/extension-table@3.27.3':
+    resolution: {integrity: sha512-P7iQ0SkkDWZwnXzQDOVFLXktXlX67VQ3s2YxoJYKTHlc8rPZ4UCaSogFq0G2APyBlizlY3LbMNrDeZAVFOD8wQ==}
+    peerDependencies:
+      '@tiptap/core': 3.27.3
+      '@tiptap/pm': 3.27.3
+
+  '@tiptap/extension-text-align@3.27.3':
+    resolution: {integrity: sha512-yyhlwRz0Eh6xQCn+GtTDWUGqxGajT02Qf8zBN/3eZQtl3EZ2xrI8lvfLmcV9SAW0srgMd+5hX0CVV+zKeXuxeg==}
+    peerDependencies:
+      '@tiptap/core': 3.27.3
+
+  '@tiptap/extension-text-style@3.27.3':
+    resolution: {integrity: sha512-oim4RqFtMBCA4N+J8f8dTFFYZrwyfmXLxLL5SvQkn+kkpfGLv8PqJCnJ4uHxsnHXDNsWHBtVVhfTGUABZsTEHg==}
     peerDependencies:
       '@tiptap/core': 3.27.3
 
@@ -2866,6 +2951,9 @@ packages:
   mdast-util-gfm@3.1.0:
     resolution: {integrity: sha512-0ulfdQOM3ysHhCJ1p06l0b0VKlhU0wuQs3thxZQagjcjPrlFRqY215uZGHHJan9GEAXd9MbfPjFJz+qMkVR6zQ==}
 
+  mdast-util-math@3.0.0:
+    resolution: {integrity: sha512-Tl9GBNeG/AhJnQM221bJR2HPvLOSnLE/T9cJI9tlc6zwQk2nPk/4f0cHkOdEixQPC/j8UtKDdITswvLAy1OZ1w==}
+
   mdast-util-mdx-expression@2.0.1:
     resolution: {integrity: sha512-J6f+9hUp+ldTZqKRSg7Vw5V6MqjATc+3E4gf3CFNcuZNWD8XdyI6zQ8GqH7f8169MM6P7hMBRDVGnn7oHB9kXQ==}
 
@@ -2914,6 +3002,9 @@ packages:
 
   micromark-extension-gfm@3.0.0:
     resolution: {integrity: sha512-vsKArQsicm7t0z2GugkCKtZehqUm31oeGBV/KVSorWSy8ZlNAv7ytjFhvaryUiCUJYqs+NoE6AFhpQvBTM6Q4w==}
+
+  micromark-extension-math@3.1.0:
+    resolution: {integrity: sha512-lvEqd+fHjATVs+2v/8kg9i5Q0AP2k85H0WUOwpIVvUML8BapsMvh1XAogmQjOCsLpoKRCVQqEkQBB3NhVBcsOg==}
 
   micromark-factory-destination@2.0.1:
     resolution: {integrity: sha512-Xe6rDdJlkmbFRExpTOmRj9N3MaWmbAgdpSrBQvCFqhezUn4AHqJHbaEnfbVYYiexVSs//tqOdY/DxhjdCiJnIA==}
@@ -3334,6 +3425,9 @@ packages:
 
   remark-gfm@4.0.1:
     resolution: {integrity: sha512-1quofZ2RQ9EWdeN34S79+KExV1764+wCUGop5CPL1WGdD0ocPpu91lzPGbwWMECpEpd42kJGQwzRfyov9j4yNg==}
+
+  remark-math@6.0.0:
+    resolution: {integrity: sha512-MMqgnP74Igy+S3WwnhQ7kqGlEerTETXMvJhrUzDikVZ2/uogJCb+WHUg97hK9/jcfc0dkD73s3LN8zU49cTEtA==}
 
   remark-parse@11.0.0:
     resolution: {integrity: sha512-FCxlKLNGknS5ba/1lmpYijMUzX2esxW5xQqjWxw2eHFfS2MSdaHVINFmhjo+qN1WhZhNimq0dZATN9pH0IDrpA==}
@@ -4955,6 +5049,10 @@ snapshots:
     dependencies:
       '@tiptap/core': 3.27.3(@tiptap/pm@3.27.3)
 
+  '@tiptap/extension-color@3.27.3(@tiptap/extension-text-style@3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3)))':
+    dependencies:
+      '@tiptap/extension-text-style': 3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))
+
   '@tiptap/extension-document@3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))':
     dependencies:
       '@tiptap/core': 3.27.3(@tiptap/pm@3.27.3)
@@ -4982,10 +5080,18 @@ snapshots:
     dependencies:
       '@tiptap/core': 3.27.3(@tiptap/pm@3.27.3)
 
+  '@tiptap/extension-highlight@3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))':
+    dependencies:
+      '@tiptap/core': 3.27.3(@tiptap/pm@3.27.3)
+
   '@tiptap/extension-horizontal-rule@3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))(@tiptap/pm@3.27.3)':
     dependencies:
       '@tiptap/core': 3.27.3(@tiptap/pm@3.27.3)
       '@tiptap/pm': 3.27.3
+
+  '@tiptap/extension-image@3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))':
+    dependencies:
+      '@tiptap/core': 3.27.3(@tiptap/pm@3.27.3)
 
   '@tiptap/extension-italic@3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))':
     dependencies:
@@ -5023,6 +5129,31 @@ snapshots:
       '@tiptap/extensions': 3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))(@tiptap/pm@3.27.3)
 
   '@tiptap/extension-strike@3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))':
+    dependencies:
+      '@tiptap/core': 3.27.3(@tiptap/pm@3.27.3)
+
+  '@tiptap/extension-table-cell@3.27.3(@tiptap/extension-table@3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))(@tiptap/pm@3.27.3))':
+    dependencies:
+      '@tiptap/extension-table': 3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))(@tiptap/pm@3.27.3)
+
+  '@tiptap/extension-table-header@3.27.3(@tiptap/extension-table@3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))(@tiptap/pm@3.27.3))':
+    dependencies:
+      '@tiptap/extension-table': 3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))(@tiptap/pm@3.27.3)
+
+  '@tiptap/extension-table-row@3.27.3(@tiptap/extension-table@3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))(@tiptap/pm@3.27.3))':
+    dependencies:
+      '@tiptap/extension-table': 3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))(@tiptap/pm@3.27.3)
+
+  '@tiptap/extension-table@3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))(@tiptap/pm@3.27.3)':
+    dependencies:
+      '@tiptap/core': 3.27.3(@tiptap/pm@3.27.3)
+      '@tiptap/pm': 3.27.3
+
+  '@tiptap/extension-text-align@3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))':
+    dependencies:
+      '@tiptap/core': 3.27.3(@tiptap/pm@3.27.3)
+
+  '@tiptap/extension-text-style@3.27.3(@tiptap/core@3.27.3(@tiptap/pm@3.27.3))':
     dependencies:
       '@tiptap/core': 3.27.3(@tiptap/pm@3.27.3)
 
@@ -6668,6 +6799,18 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  mdast-util-math@3.0.0:
+    dependencies:
+      '@types/hast': 3.0.4
+      '@types/mdast': 4.0.4
+      devlop: 1.1.0
+      longest-streak: 3.1.0
+      mdast-util-from-markdown: 2.0.3
+      mdast-util-to-markdown: 2.1.2
+      unist-util-remove-position: 5.0.0
+    transitivePeerDependencies:
+      - supports-color
+
   mdast-util-mdx-expression@2.0.1:
     dependencies:
       '@types/estree-jsx': 1.0.5
@@ -6817,6 +6960,16 @@ snapshots:
       micromark-extension-gfm-tagfilter: 2.0.0
       micromark-extension-gfm-task-list-item: 2.1.0
       micromark-util-combine-extensions: 2.0.1
+      micromark-util-types: 2.0.2
+
+  micromark-extension-math@3.1.0:
+    dependencies:
+      '@types/katex': 0.16.8
+      devlop: 1.1.0
+      katex: 0.16.47
+      micromark-factory-space: 2.0.1
+      micromark-util-character: 2.1.1
+      micromark-util-symbol: 2.0.1
       micromark-util-types: 2.0.2
 
   micromark-factory-destination@2.0.1:
@@ -7356,6 +7509,15 @@ snapshots:
       micromark-extension-gfm: 3.0.0
       remark-parse: 11.0.0
       remark-stringify: 11.0.0
+      unified: 11.0.5
+    transitivePeerDependencies:
+      - supports-color
+
+  remark-math@6.0.0:
+    dependencies:
+      '@types/mdast': 4.0.4
+      mdast-util-math: 3.0.0
+      micromark-extension-math: 3.1.0
       unified: 11.0.5
     transitivePeerDependencies:
       - supports-color

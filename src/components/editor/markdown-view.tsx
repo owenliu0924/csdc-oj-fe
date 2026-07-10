@@ -5,8 +5,8 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
-import { cn } from "@/lib/utils";
 import "katex/dist/katex.min.css";
+import { cn } from "@/lib/utils";
 
 export function MarkdownView({
   content,
@@ -24,9 +24,7 @@ export function MarkdownView({
       >
         {content}
       </ReactMarkdown>
-
     </div>
-
   );
 }
 

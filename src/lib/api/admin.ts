@@ -195,7 +195,28 @@ export const adminApi = {
         ...(csrf ? { "X-CSRFToken": csrf } : {}),
       },
     });
-    return res.data;
+    return res.data as {
+      success: boolean;
+      msg?: string;
+      file_path?: string;
+    };
+  },
+  async uploadFile(file: File) {
+    const form = new FormData();
+    form.append("file", file);
+    const csrf = getCookie("csrftoken");
+    const res = await apiClient.post("admin/upload_file", form, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        ...(csrf ? { "X-CSRFToken": csrf } : {}),
+      },
+    });
+    return res.data as {
+      success: boolean;
+      msg?: string;
+      file_path?: string;
+      file_name?: string;
+    };
   },
 };
 
