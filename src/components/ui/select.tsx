@@ -40,7 +40,7 @@ const SelectContent = React.forwardRef<
 
       position={position}
       className={cn(
-        "relative z-[90] min-w-[8rem] overflow-hidden rounded-2xl glass-float text-foreground",
+        "relative z-[200] min-w-[8rem] overflow-hidden rounded-2xl glass-float text-foreground",
         className
       )}
       {...props}

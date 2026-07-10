@@ -10,6 +10,7 @@ import { setNeedLoginHandler, ensureCsrfCookie } from "@/lib/api/client";
 import { AuthModal } from "@/components/oj/auth-modal";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { AppearanceProvider } from "@/components/layout/appearance-provider";
+import { WelcomeNotice } from "@/components/layout/welcome-notice";
 
 function ThemedToaster() {
   const { resolvedTheme } = useTheme();
@@ -60,6 +61,7 @@ export function AppProviders({
       <AppearanceProvider>
         {children}
         <AuthModal />
+        <WelcomeNotice />
         <ThemedToaster />
       </AppearanceProvider>
 

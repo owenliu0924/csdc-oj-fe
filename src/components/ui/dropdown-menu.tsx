@@ -34,7 +34,7 @@ const DropdownMenuContent = React.forwardRef<
       >
         <motion.div
           className={cn(
-            "z-[90] min-w-[11rem] overflow-hidden rounded-2xl glass-float p-1.5 text-foreground",
+            "z-[200] min-w-[11rem] overflow-hidden rounded-2xl glass-float p-1.5 text-foreground",
             className
           )}
           initial={
