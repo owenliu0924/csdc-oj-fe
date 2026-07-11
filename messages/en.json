@@ -251,7 +251,9 @@
     "UserHomeIntro": "The guy is so lazy that has not solved any problem yet.",
     "Title": "Title",
     "FromFile": "From File",
-    "ToFile": "To File"
+    "ToFile": "To File",
+    "Run_Code": "Run Code",
+    "Running": "Running..."
   },
   "admin": {
     "Dashboard": "Dashboard",

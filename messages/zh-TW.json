@@ -251,7 +251,9 @@
     "UserHomeIntro": "這個使用者尚未解題...",
     "Title": "標題",
     "FromFile": "讀取檔案",
-    "ToFile": "寫入檔案"
+    "ToFile": "寫入檔案",
+    "Run_Code": "執行程式碼",
+    "Running": "執行中..."
   },
   "admin": {
     "Dashboard": "儀表板",

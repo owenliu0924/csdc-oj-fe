@@ -18,7 +18,9 @@ import { useUserStore } from "@/stores/user";
 import { useAuthModalStore } from "@/stores/auth-modal";
 import { useContestStore } from "@/stores/contest";
 import { AnimatePresence, motion } from "motion/react";
-import { ChevronDown, Copy } from "lucide-react";
+import { ChevronDown, GripHorizontal, GripVertical, Play } from "lucide-react";
+import { Panel, Group as PanelGroup, Separator as PanelResizeHandle } from "react-resizable-panels";
+import { TestcasePanel, Testcase, RunResult } from "@/components/editor/testcase-panel";
 import { cn } from "@/lib/utils";
 import { springSoft } from "@/lib/motion";
 import { ProblemStatistic } from "@/components/oj/problem-statistic-dynamic";
@@ -74,6 +76,11 @@ export function ProblemDetail({ problemID, contestID }: Props) {
 
   const storageKey = buildProblemCodeKey(problemID, contestID || null);
 
+  const [testcases, setTestcases] = useState<Testcase[]>([]);
+  const [activeTestcaseTab, setActiveTestcaseTab] = useState("tc-0");
+  const [runResult, setRunResult] = useState<RunResult | null>(null);
+  const [isTesting, setIsTesting] = useState(false);
+
   const loadProblem = useCallback(async () => {
     setLoading(true);
     try {
@@ -82,6 +89,19 @@ export function ProblemDetail({ problemID, contestID }: Props) {
         : await ojApi.getProblem(problemID);
       const p = res.data.data as Problem;
       setProblem(p);
+      if (p.samples?.length > 0) {
+        const initTc = p.samples.map((s, i) => ({
+          id: `tc-${i}`,
+          input: s.input,
+          expected_output: s.output,
+        }));
+        setTestcases(initTc);
+        setActiveTestcaseTab(initTc[0].id);
+      } else {
+        const id = `tc-${Date.now()}`;
+        setTestcases([{ id, input: "", expected_output: "" }]);
+        setActiveTestcaseTab(id);
+      }
       const langs = p.languages || [];
       const saved = storage.get<{ code?: string; language?: string }>(storageKey);
       const lang = saved?.language || langs[0] || "C++";
@@ -134,6 +154,46 @@ export function ProblemDetail({ problemID, contestID }: Props) {
         setSubmitting(false);
       }
     }, 1500);
+  };
+
+  const runTestCode = async () => {
+    if (!isAuth()) {
+      openAuth("login");
+      return;
+    }
+    const currentTc = testcases.find((t) => t.id === activeTestcaseTab);
+    if (!currentTc) return;
+
+    setIsTesting(true);
+    setRunResult(null);
+    try {
+      const res = await ojApi.testCode({
+        problem_id: problem!.id,
+        language,
+        code,
+        input: currentTc.input,
+        expected_output: currentTc.expected_output,
+      });
+      const data = res.data.data as { stdout: string; stderr: string; status: string };
+      setRunResult({
+        stdout: data.stdout || "",
+        stderr: data.stderr || "",
+        status: data.status || "Finished",
+        testcaseId: activeTestcaseTab,
+      });
+      setActiveTestcaseTab("result");
+    } catch (error) {
+      const err = error as { response?: { data?: { data?: string } }, message?: string };
+      setRunResult({
+        stdout: "",
+        stderr: err?.response?.data?.data || err?.message || "Request Failed",
+        status: "Error",
+        testcaseId: activeTestcaseTab,
+      });
+      setActiveTestcaseTab("result");
+    } finally {
+      setIsTesting(false);
+    }
   };
 
   const submit = async () => {
@@ -197,99 +257,255 @@ export function ProblemDetail({ problemID, contestID }: Props) {
     result != null ? JUDGE_STATUS[String(result)] : null;
 
   return (
-    <div className="grid gap-4 lg:grid-cols-[1fr_280px]">
-      <div className="space-y-4">
-        <GlassPanel title={problem.title}>
-          <div className="space-y-6">
-            <section>
-              <h3 className="mb-2 text-sm font-medium text-[var(--pink-bright)]">
-                {t("Description")}
-              </h3>
-
-              <HtmlContent html={problem.description} />
-            </section>
-
-            <section>
-              <h3 className="mb-2 text-sm font-medium text-[var(--pink-bright)]">
-                {t("Input")}
-                {problem.io_mode?.io_mode === "File IO" &&
-                  ` (${t("FromFile") || "From"}: ${problem.io_mode.input})`}
-              </h3>
-
-              <HtmlContent html={problem.input_description} />
-            </section>
-
-            <section>
-              <h3 className="mb-2 text-sm font-medium text-[var(--pink-bright)]">
-                {t("Output")}
-                {problem.io_mode?.io_mode === "File IO" &&
-                  ` (${t("ToFile") || "To"}: ${problem.io_mode.output})`}
-              </h3>
-
-              <HtmlContent html={problem.output_description} />
-            </section>
-
-            {problem.samples?.map((s, i) => (
-              <div key={i} className="grid gap-3 sm:grid-cols-2">
-                <div className="rounded-xl border border-white/10 bg-black/20 p-3">
-                  <div className="mb-2 flex items-center justify-between text-xs font-semibold text-muted">
-                    <span>
-                      {t("Sample_Input")} {i + 1}
-                    </span>
-
-                    <button
-                      type="button"
-                      className="hover:text-white"
-                      onClick={() => {
-                        navigator.clipboard.writeText(s.input);
-                        toast.success("Copied");
-                      }}
-                    >
-                      <Copy className="h-3.5 w-3.5" />
-                    </button>
-
-                  </div>
-
-                  <pre className="whitespace-pre-wrap font-mono text-sm">
-                    {s.input}
-                  </pre>
-
-                </div>
-
-                <div className="rounded-xl border border-white/10 bg-black/20 p-3">
-                  <div className="mb-2 text-xs font-semibold text-muted">
-                    {t("Sample_Output")} {i + 1}
-                  </div>
-
-                  <pre className="whitespace-pre-wrap font-mono text-sm">
-                    {s.output}
-                  </pre>
-
-                </div>
-
-              </div>
-
-            ))}
-            {problem.hint && problem.hint.replace(/<[^>]*>/g, "").trim() && (
-              <HintSection title={t("Hint")} html={problem.hint} />
-            )}
-            {problem.source && (
+    <div className="h-[calc(100vh-8rem)] min-h-[600px] flex flex-col">
+      <PanelGroup orientation="horizontal" className="hidden lg:flex gap-2">
+        <Panel defaultSize={40} minSize={30} className="flex flex-col gap-4 overflow-y-auto custom-scrollbar pr-2 pb-4">
+          <GlassPanel title={problem.title}>
+            <div className="space-y-6">
               <section>
                 <h3 className="mb-2 text-sm font-medium text-[var(--pink-bright)]">
-                  {t("Source")}
+                  {t("Description")}
                 </h3>
-
-                <p className="text-sm text-muted">{problem.source}</p>
-
+                <HtmlContent html={problem.description} />
               </section>
 
-            )}
-          </div>
+              <section>
+                <h3 className="mb-2 text-sm font-medium text-[var(--pink-bright)]">
+                  {t("Input")}
+                  {problem.io_mode?.io_mode === "File IO" &&
+                    ` (${t("FromFile") || "From"}: ${problem.io_mode.input})`}
+                </h3>
+                <HtmlContent html={problem.input_description} />
+              </section>
 
+              <section>
+                <h3 className="mb-2 text-sm font-medium text-[var(--pink-bright)]">
+                  {t("Output")}
+                  {problem.io_mode?.io_mode === "File IO" &&
+                    ` (${t("ToFile") || "To"}: ${problem.io_mode.output})`}
+                </h3>
+                <HtmlContent html={problem.output_description} />
+              </section>
+
+              {problem.samples?.length > 0 && (
+                <div className="space-y-6">
+                  {problem.samples.map((sample, idx) => (
+                    <div key={idx} className="space-y-4">
+                      <section>
+                        <h3 className="mb-2 text-sm font-medium text-[var(--pink-bright)]">
+                          {t("Sample_Input")} {problem.samples.length > 1 ? idx + 1 : ""}
+                        </h3>
+                        <pre className="p-3 rounded-xl border border-white/10 bg-black/40 overflow-x-auto text-sm font-mono whitespace-pre-wrap">{sample.input}</pre>
+                      </section>
+                      <section>
+                        <h3 className="mb-2 text-sm font-medium text-[var(--pink-bright)]">
+                          {t("Sample_Output")} {problem.samples.length > 1 ? idx + 1 : ""}
+                        </h3>
+                        <pre className="p-3 rounded-xl border border-white/10 bg-black/40 overflow-x-auto text-sm font-mono whitespace-pre-wrap">{sample.output}</pre>
+                      </section>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {problem.hint && problem.hint.replace(/<[^>]*>/g, "").trim() && (
+                <HintSection title={t("Hint")} html={problem.hint} />
+              )}
+              {problem.source && (
+                <section>
+                  <h3 className="mb-2 text-sm font-medium text-[var(--pink-bright)]">
+                    {t("Source")}
+                  </h3>
+                  <p className="text-sm text-muted">{problem.source}</p>
+                </section>
+              )}
+            </div>
+          </GlassPanel>
+
+          <GlassCard>
+            <h3 className="mb-3 text-sm font-semibold">{t("Information")}</h3>
+            <dl className="space-y-2 text-sm">
+              <div className="flex justify-between gap-2">
+                <dt className="text-muted">{t("Time_Limit")}</dt>
+                <dd>{problem.time_limit} ms</dd>
+              </div>
+              <div className="flex justify-between gap-2">
+                <dt className="text-muted">{t("Memory_Limit")}</dt>
+                <dd>{problem.memory_limit} MB</dd>
+              </div>
+              <div className="flex justify-between gap-2">
+                <dt className="text-muted">{t("Level")}</dt>
+                <dd>
+                  <Badge
+                    variant={
+                      problem.difficulty === "High"
+                        ? "danger"
+                        : problem.difficulty === "Mid"
+                          ? "warning"
+                          : "success"
+                    }
+                  >
+                    {problem.difficulty}
+                  </Badge>
+                </dd>
+              </div>
+              {problem.created_by && (
+                <div className="flex justify-between gap-2">
+                  <dt className="text-muted">{t("Created")}</dt>
+                  <dd>{problem.created_by.username}</dd>
+                </div>
+              )}
+            </dl>
+            {problem.tags?.length > 0 && (
+              <div className="mt-4">
+                <p className="mb-2 text-xs text-muted">{t("Tags")}</p>
+                <div className="flex flex-wrap gap-1">
+                  {problem.tags.map((tag) => (
+                    <Badge key={tag} variant="secondary">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )}
+            {statusInfo && (
+              <p className="mt-3 text-xs text-muted">{statusInfo.name}</p>
+            )}
+          </GlassCard>
+
+          {(!contestID || oiRealtime()) && (
+            <ProblemStatistic
+              statisticInfo={problem.statistic_info}
+              acceptedNumber={problem.accepted_number}
+              submissionNumber={problem.submission_number}
+            />
+          )}
+        </Panel>
+
+        <PanelResizeHandle className="w-2 flex items-center justify-center cursor-col-resize hover:bg-white/5 transition-colors rounded-full group mx-1">
+          <GripVertical className="h-4 w-4 text-white/20 group-hover:text-white/60" />
+        </PanelResizeHandle>
+
+        <Panel defaultSize={60} minSize={40} className="flex flex-col h-full">
+          <PanelGroup orientation="vertical">
+            <Panel defaultSize={60} minSize={30} className="flex flex-col">
+              <GlassCard className="flex-1 flex flex-col p-4 mb-2">
+                <CodeEditor
+                  className="flex-1 min-h-0"
+                  value={code}
+                  onChange={setCode}
+                  language={language}
+                  languages={problem.languages || []}
+                  onLanguageChange={onLangChange}
+                  onReset={onReset}
+                />
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-3 shrink-0">
+                  <div className="flex items-center gap-2 text-sm">
+                    {result != null && submissionId && (
+                      <>
+                        <span className="text-muted">{t("Status")}</span>
+                        <Link href={`/status/${submissionId}`}>
+                          <StatusBadge status={result} />
+                        </Link>
+                      </>
+                    )}
+                    {problem.my_status === 0 && result == null && (
+                      <span className="text-[var(--success)] text-sm">
+                        {t("You_have_solved_the_problem")}
+                      </span>
+                    )}
+                    {contestID && contestStatusEnded && (
+                      <span className="text-amber-400 text-sm">
+                        {t("Contest_has_ended")}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Button
+                      variant="secondary"
+                      onClick={runTestCode}
+                      disabled={isTesting}
+                      className="gap-2"
+                    >
+                      <Play className="w-4 h-4" />
+                      {isTesting ? t("Running") : t("Run_Code")}
+                    </Button>
+                    <Button onClick={submit} disabled={submitting}>
+                      {submitting ? t("Submitting") : t("Submit")}
+                    </Button>
+                  </div>
+                </div>
+              </GlassCard>
+            </Panel>
+
+            <PanelResizeHandle className="h-2 flex items-center justify-center cursor-row-resize hover:bg-white/5 transition-colors rounded-full group my-1">
+              <GripHorizontal className="h-4 w-4 text-white/20 group-hover:text-white/60" />
+            </PanelResizeHandle>
+
+            <Panel defaultSize={40} minSize={20}>
+              <TestcasePanel
+                testcases={testcases}
+                setTestcases={setTestcases}
+                activeTab={activeTestcaseTab}
+                setActiveTab={setActiveTestcaseTab}
+                runResult={runResult}
+                className="h-full"
+              />
+            </Panel>
+          </PanelGroup>
+        </Panel>
+      </PanelGroup>
+
+      <div className="flex flex-col lg:hidden gap-6">
+        <GlassPanel title={problem.title}>
+          <div className="space-y-6">
+             <section>
+                <h3 className="mb-2 text-sm font-medium text-[var(--pink-bright)]">
+                  {t("Description")}
+                </h3>
+                <HtmlContent html={problem.description} />
+              </section>
+              <section>
+                <h3 className="mb-2 text-sm font-medium text-[var(--pink-bright)]">
+                  {t("Input")}
+                </h3>
+                <HtmlContent html={problem.input_description} />
+              </section>
+              <section>
+                <h3 className="mb-2 text-sm font-medium text-[var(--pink-bright)]">
+                  {t("Output")}
+                </h3>
+                <HtmlContent html={problem.output_description} />
+              </section>
+              {problem.samples?.length > 0 && (
+                <div className="space-y-6">
+                  {problem.samples.map((sample, idx) => (
+                    <div key={idx} className="space-y-4">
+                      <section>
+                        <h3 className="mb-2 text-sm font-medium text-[var(--pink-bright)]">
+                          {t("Sample_Input")} {problem.samples.length > 1 ? idx + 1 : ""}
+                        </h3>
+                        <pre className="p-3 rounded-xl border border-white/10 bg-black/40 overflow-x-auto text-sm font-mono whitespace-pre-wrap">{sample.input}</pre>
+                      </section>
+                      <section>
+                        <h3 className="mb-2 text-sm font-medium text-[var(--pink-bright)]">
+                          {t("Sample_Output")} {problem.samples.length > 1 ? idx + 1 : ""}
+                        </h3>
+                        <pre className="p-3 rounded-xl border border-white/10 bg-black/40 overflow-x-auto text-sm font-mono whitespace-pre-wrap">{sample.output}</pre>
+                      </section>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {problem.hint && problem.hint.replace(/<[^>]*>/g, "").trim() && (
+                <HintSection title={t("Hint")} html={problem.hint} />
+              )}
+          </div>
         </GlassPanel>
 
-        <GlassCard>
+        <GlassCard className="min-h-[500px] flex flex-col">
           <CodeEditor
+            className="flex-1"
             value={code}
             onChange={setCode}
             language={language}
@@ -297,106 +513,36 @@ export function ProblemDetail({ problemID, contestID }: Props) {
             onLanguageChange={onLangChange}
             onReset={onReset}
           />
-          <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-2 text-sm">
-              {result != null && submissionId && (
-                <>
-                  <span className="text-muted">{t("Status")}</span>
-
-                  <Link href={`/status/${submissionId}`}>
-                    <StatusBadge status={result} />
-                  </Link>
-
-                </>
-
-              )}
-              {problem.my_status === 0 && result == null && (
-                <span className="text-[var(--success)] text-sm">
-                  {t("You_have_solved_the_problem")}
-                </span>
-
-              )}
-              {contestID && contestStatusEnded && (
-                <span className="text-amber-400 text-sm">
-                  {t("Contest_has_ended")}
-                </span>
-
-              )}
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3 shrink-0">
+             <div className="flex items-center gap-3 ml-auto">
+              <Button
+                variant="secondary"
+                onClick={runTestCode}
+                disabled={isTesting}
+                className="gap-2"
+              >
+                <Play className="w-4 h-4" />
+                {isTesting ? t("Running") : t("Run_Code")}
+              </Button>
+              <Button onClick={submit} disabled={submitting}>
+                {submitting ? t("Submitting") : t("Submit")}
+              </Button>
             </div>
-
-            <Button onClick={submit} disabled={submitting}>
-              {submitting ? t("Submitting") : t("Submit")}
-            </Button>
-
           </div>
-
         </GlassCard>
 
-      </div>
-
-      <div className="space-y-4">
-        <GlassCard>
-          <h3 className="mb-3 text-sm font-semibold">{t("Information")}</h3>
-          <dl className="space-y-2 text-sm">
-            <div className="flex justify-between gap-2">
-              <dt className="text-muted">{t("Time_Limit")}</dt>
-              <dd>{problem.time_limit} ms</dd>
-            </div>
-            <div className="flex justify-between gap-2">
-              <dt className="text-muted">{t("Memory_Limit")}</dt>
-              <dd>{problem.memory_limit} MB</dd>
-            </div>
-            <div className="flex justify-between gap-2">
-              <dt className="text-muted">{t("Level")}</dt>
-              <dd>
-                <Badge
-                  variant={
-                    problem.difficulty === "High"
-                      ? "danger"
-                      : problem.difficulty === "Mid"
-                        ? "warning"
-                        : "success"
-                  }
-                >
-                  {problem.difficulty}
-                </Badge>
-              </dd>
-            </div>
-            {problem.created_by && (
-              <div className="flex justify-between gap-2">
-                <dt className="text-muted">{t("Created")}</dt>
-                <dd>{problem.created_by.username}</dd>
-              </div>
-            )}
-          </dl>
-          {problem.tags?.length > 0 && (
-            <div className="mt-4">
-              <p className="mb-2 text-xs text-muted">{t("Tags")}</p>
-              <div className="flex flex-wrap gap-1">
-                {problem.tags.map((tag) => (
-                  <Badge key={tag} variant="secondary">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          )}
-          {statusInfo && (
-            <p className="mt-3 text-xs text-muted">{statusInfo.name}</p>
-          )}
-        </GlassCard>
-
-        {(!contestID || oiRealtime()) && (
-          <ProblemStatistic
-            statisticInfo={problem.statistic_info}
-            acceptedNumber={problem.accepted_number}
-            submissionNumber={problem.submission_number}
+        <div className="h-[400px]">
+          <TestcasePanel
+            testcases={testcases}
+            setTestcases={setTestcases}
+            activeTab={activeTestcaseTab}
+            setActiveTab={setActiveTestcaseTab}
+            runResult={runResult}
+            className="h-full"
           />
-        )}
+        </div>
       </div>
-
     </div>
-
   );
 }
 

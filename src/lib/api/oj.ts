@@ -1,3 +1,4 @@
+import axios from "axios";
 import { ajax } from "./client";
 
 export const ojApi = {
@@ -129,6 +130,9 @@ export const ojApi = {
   },
   submitCode(data: Record<string, unknown>) {
     return ajax("submission", "post", { data });
+  },
+  testCode(data: Record<string, unknown>) {
+    return axios.post("/api/judge0/test", data);
   },
   getSubmissionList(
     offset: number,

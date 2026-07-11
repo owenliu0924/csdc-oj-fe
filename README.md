@@ -23,7 +23,20 @@ pnpm dev
 | Variable | Description |
 |----------|-------------|
 | `OJ_BACKEND_URL` | OnlineJudge backend base URL (default `http://127.0.0.1:8080`) |
+| `JUDGE0_API_URL` | Judge0 API server URL (default `http://127.0.0.1:2358`) |
 | `NEXT_PUBLIC_APP_NAME` | Display name fallback |
+
+## Judge0 Setup (for Run Code feature)
+
+We use Judge0 for the code execution environment. A local Docker setup script is provided in this project.
+To start Judge0 locally:
+```bash
+cd judge0/judge0-v1.13.1
+docker compose up -d db redis
+sleep 10
+docker compose up -d
+```
+Then Judge0 will be available at `http://127.0.0.1:2358`.
 
 API requests to `/api/*` and `/public/*` are proxied to the backend via `next.config.ts`.
 
