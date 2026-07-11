@@ -2,7 +2,8 @@
 
 import CodeMirror from "@uiw/react-codemirror";
 import { oneDark } from "@codemirror/theme-one-dark";
-import { cpp } from "@codemirror/lang-cpp";
+import { cpp, cppLanguage } from "@codemirror/lang-cpp";
+import { completeFromList, snippetCompletion } from "@codemirror/autocomplete";
 import { java } from "@codemirror/lang-java";
 import { python } from "@codemirror/lang-python";
 import { javascript } from "@codemirror/lang-javascript";
@@ -20,12 +21,46 @@ import { useTranslations } from "next-intl";
 import { useRef } from "react";
 import { useTheme } from "next-themes";
 
+const cppCompletions = cppLanguage.data.of({
+  autocomplete: completeFromList([
+    snippetCompletion("#include <${}>", { label: "#include", type: "keyword" }),
+    { label: "int", type: "type" },
+    { label: "float", type: "type" },
+    { label: "double", type: "type" },
+    { label: "char", type: "type" },
+    { label: "bool", type: "type" },
+    { label: "void", type: "type" },
+    { label: "auto", type: "type" },
+    { label: "const", type: "keyword" },
+    { label: "class", type: "keyword" },
+    { label: "struct", type: "keyword" },
+    { label: "namespace", type: "keyword" },
+    { label: "using", type: "keyword" },
+    { label: "return", type: "keyword" },
+    snippetCompletion("if (${})", { label: "if", type: "keyword" }),
+    { label: "else", type: "keyword" },
+    snippetCompletion("for (${})", { label: "for", type: "keyword" }),
+    snippetCompletion("while (${})", { label: "while", type: "keyword" }),
+    { label: "break", type: "keyword" },
+    { label: "continue", type: "keyword" },
+    { label: "std", type: "namespace" },
+    { label: "cout", type: "variable" },
+    { label: "cin", type: "variable" },
+    { label: "endl", type: "variable" },
+    snippetCompletion("vector<${}>", { label: "vector", type: "type" }),
+    { label: "string", type: "type" },
+    snippetCompletion("map<${}>", { label: "map", type: "type" }),
+    snippetCompletion("set<${}>", { label: "set", type: "type" }),
+    { label: "main", type: "function", apply: "main() {\n  \n  return 0;\n}" },
+  ]),
+});
+
 function langExtension(language: string) {
   const l = language.toLowerCase();
   if (l.includes("python")) return python();
   if (l.includes("java")) return java();
   if (l.includes("javascript") || l.includes("node")) return javascript();
-  return cpp();
+  return [cpp(), cppCompletions];
 }
 
 type Props = {
