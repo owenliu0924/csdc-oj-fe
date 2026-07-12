@@ -6,6 +6,8 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
+import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
+import DOMPurify from "isomorphic-dompurify";
 import renderMathInElement from "katex/contrib/auto-render";
 import "katex/dist/katex.min.css";
 import { cn } from "@/lib/utils";
@@ -52,7 +54,20 @@ export function MarkdownView({
     <div className={cn("markdown-body", className)}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
-        rehypePlugins={[rehypeRaw, rehypeKatex]}
+        rehypePlugins={[
+          rehypeRaw,
+          [
+            rehypeSanitize,
+            {
+              ...defaultSchema,
+              attributes: {
+                ...defaultSchema.attributes,
+                "*": ["className", "style"],
+              },
+            },
+          ],
+          rehypeKatex,
+        ]}
       >
         {content}
       </ReactMarkdown>
@@ -93,7 +108,7 @@ function HtmlWithKatex({
     if (!el) return;
 
     if (appliedHtml.current !== html) {
-      el.innerHTML = html;
+      el.innerHTML = DOMPurify.sanitize(html);
       appliedHtml.current = html;
       renderLatex(el);
     }

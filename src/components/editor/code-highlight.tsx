@@ -8,6 +8,7 @@ import python from "highlight.js/lib/languages/python";
 import javascript from "highlight.js/lib/languages/javascript";
 import "highlight.js/styles/github-dark.css";
 import { cn } from "@/lib/utils";
+import DOMPurify from "isomorphic-dompurify";
 
 hljs.registerLanguage("cpp", cpp);
 hljs.registerLanguage("c", cpp);
@@ -53,9 +54,8 @@ export function CodeHighlight({
     >
       <code
         className="hljs"
-        dangerouslySetInnerHTML={{ __html: html || code }}
+        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(html || code) }}
       />
     </pre>
-
   );
 }
