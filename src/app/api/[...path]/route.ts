@@ -37,6 +37,17 @@ async function proxy(req: NextRequest, path: string[]) {
   headers.set("Origin", BACKEND);
   headers.set("Host", new URL(BACKEND).host);
 
+  // Forward client IP headers to backend
+  const clientIP =
+    req.headers.get("cf-connecting-ip") ||
+    req.headers.get("x-real-ip") ||
+    req.headers.get("x-forwarded-for")?.split(",")[0].trim();
+
+  if (clientIP) {
+    headers.set("X-Real-IP", clientIP);
+    headers.set("X-Forwarded-For", clientIP);
+  }
+
   const csrf =
     req.headers.get("x-csrftoken") ||
     req.headers.get("X-CSRFToken") ||
