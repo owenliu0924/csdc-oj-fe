@@ -3,7 +3,6 @@
 import { motion, useReducedMotion } from "motion/react";
 import { useWebsiteStore } from "@/stores/website";
 import { fadeTransition } from "@/lib/motion";
-import DOMPurify from "isomorphic-dompurify";
 
 const GITHUB_URL = "https://github.com/owenliu0924/csdc-oj-fe";
 
@@ -22,7 +21,7 @@ export function Footer() {
         {website.website_footer ? (
           <div
             className="prose prose-invert prose-sm text-[var(--faint)]"
-            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(website.website_footer) }}
+            dangerouslySetInnerHTML={{ __html: website.website_footer }}
           />
         ) : (
           <span className="tracking-wide">

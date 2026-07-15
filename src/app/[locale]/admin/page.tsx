@@ -8,7 +8,6 @@ import { Loading } from "@/components/oj/loading";
 import adminApi from "@/lib/api/admin";
 import { useUserStore } from "@/stores/user";
 import { utcToLocal } from "@/lib/time";
-import DOMPurify from "isomorphic-dompurify";
 
 export default function AdminDashboardPage() {
   const t = useTranslations("admin");
@@ -188,7 +187,7 @@ export default function AdminDashboardPage() {
                   {r.body && (
                     <div
                       className="mt-2 text-sm text-muted prose prose-invert prose-sm max-w-none"
-                      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(r.body) }}
+                      dangerouslySetInnerHTML={{ __html: r.body }}
                     />
                   )}
                 </details>
