@@ -206,6 +206,8 @@
     "RegisterPassword": "Password",
     "Password_Again": "Password Again",
     "Captcha": "Captcha",
+    "RefreshCaptcha": "Reload",
+    "ClickToRefreshCaptcha": "Click to refresh captcha",
     "UserRegister": "Register",
     "Already_Registed": "Already registed? Login now!",
     "The_username_already_exists": "The username already exists.",

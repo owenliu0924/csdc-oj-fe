@@ -22,7 +22,11 @@ export const ojApi = {
     return ajax("logout", "get");
   },
   getCaptcha() {
-    return ajax<{ captcha_key: string; captcha_image: string }>("captcha", "get");
+    // Payload may be a base64 string (classic OJ) or { captcha_key, captcha_image }.
+    return ajax<string | { captcha_key?: string; captcha_image?: string }>(
+      "captcha",
+      "get"
+    );
   },
   getUserInfo(username?: string) {
     return ajax("profile", "get", { params: { username } });

@@ -206,6 +206,8 @@
     "RegisterPassword": "密碼",
     "Password_Again": "確認密碼",
     "Captcha": "驗證碼",
+    "RefreshCaptcha": "重新載入",
+    "ClickToRefreshCaptcha": "點擊重新載入驗證碼",
     "UserRegister": "註冊",
     "Already_Registed": "已經註冊? 現在登入!",
     "The_username_already_exists": "此使用者名稱已經存在.",
