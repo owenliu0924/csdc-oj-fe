@@ -6,7 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "cf:build": "opennextjs-cloudflare build",
+    "deploy": "opennextjs-cloudflare build && wrangler deploy --keep-vars",
+    "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.20.3",
@@ -55,10 +60,10 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.21",
+    "dompurify": "^3.4.12",
     "echarts": "^6.1.0",
     "echarts-for-react": "^3.0.6",
     "highlight.js": "^11.11.1",
-    "isomorphic-dompurify": "^3.18.0",
     "katex": "^0.17.0",
     "lucide-react": "^1.23.0",
     "motion": "^12.42.2",
@@ -83,6 +88,7 @@
     "zustand": "^5.0.14"
   },
   "devDependencies": {
+    "@opennextjs/cloudflare": "^1.20.1",
     "@tailwindcss/postcss": "^4",
     "@types/highlight.js": "^10.1.0",
     "@types/node": "^20",
@@ -92,15 +98,20 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.10",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.110.0"
   },
   "pnpm": {
     "overrides": {
       "postcss": ">=8.5.10"
     },
-    "ignoredBuiltDependencies": [
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "workerd",
       "sharp",
-      "unrs-resolver"
+      "unrs-resolver",
+      "@parcel/watcher",
+      "@swc/core"
     ]
   }
 }

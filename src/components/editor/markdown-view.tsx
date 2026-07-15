@@ -7,7 +7,7 @@ import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
-import DOMPurify from "isomorphic-dompurify";
+import { sanitizeHtml } from "@/lib/sanitize";
 import renderMathInElement from "katex/contrib/auto-render";
 import "katex/dist/katex.min.css";
 import { cn } from "@/lib/utils";
@@ -108,7 +108,7 @@ function HtmlWithKatex({
     if (!el) return;
 
     if (appliedHtml.current !== html) {
-      el.innerHTML = DOMPurify.sanitize(html);
+      el.innerHTML = sanitizeHtml(html);
       appliedHtml.current = html;
       renderLatex(el);
     }
