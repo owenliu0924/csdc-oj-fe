@@ -91,7 +91,6 @@ async function proxy(req: NextRequest, path: string[]) {
       : [];
   if (setCookies.length > 0) {
     for (const c of setCookies) {
-
       const cleaned = c
         .split(";")
         .map((p) => p.trim())
