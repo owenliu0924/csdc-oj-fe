@@ -95,12 +95,15 @@
     "typescript": "^5"
   },
   "pnpm": {
-    "overrides": {
-      "postcss": ">=8.5.10"
-    },
     "ignoredBuiltDependencies": [
       "sharp",
       "unrs-resolver"
     ]
+  },
+  "overrides": {
+    "postcss": ">=8.5.10"
+  },
+  "resolutions": {
+    "postcss": ">=8.5.10"
   }
 }

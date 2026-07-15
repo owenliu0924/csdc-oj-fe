@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import ojApi from "@/lib/api/oj";
-import { parseCaptchaData } from "@/lib/captcha";
 
 export default function ApplyResetPasswordPage() {
   const t = useTranslations("m");
@@ -16,19 +15,12 @@ export default function ApplyResetPasswordPage() {
   const [captcha, setCaptcha] = useState("");
   const [captchaKey, setCaptchaKey] = useState("");
   const [captchaImg, setCaptchaImg] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const loadCaptcha = async () => {
-    try {
-      const res = await ojApi.getCaptcha();
-      const { captchaKey: key, captchaImg: img } = parseCaptchaData(
-        res.data.data
-      );
-      setCaptchaKey(key);
-      setCaptchaImg(img);
-    } catch {
-      /* ajax toasts */
-    }
+    const res = await ojApi.getCaptcha();
+    const data = res.data.data as { captcha_key: string; captcha_image: string };
+    setCaptchaKey(data.captcha_key);
+    setCaptchaImg(data.captcha_image);
   };
 
   useEffect(() => {
@@ -36,23 +28,12 @@ export default function ApplyResetPasswordPage() {
   }, []);
 
   const submit = async () => {
-    if (!captcha.trim()) {
-      toast.error(t("CaptchaRequired"));
-      return;
-    }
-    setLoading(true);
-    try {
-      await ojApi.applyResetPassword({
-        email,
-        captcha,
-        ...(captchaKey ? { captcha_key: captchaKey } : {}),
-      });
-      toast.success(t("Password_reset_mail_sent"));
-    } catch {
-      loadCaptcha();
-    } finally {
-      setLoading(false);
-    }
+    await ojApi.applyResetPassword({
+      email,
+      captcha,
+      captcha_key: captchaKey,
+    });
+    toast.success(t("Password_reset_mail_sent"));
   };
 
   return (
@@ -73,37 +54,29 @@ export default function ApplyResetPasswordPage() {
             <Label>{t("RCaptcha")}</Label>
 
             <div className="flex gap-2">
-              <Input
-                value={captcha}
-                onChange={(e) => setCaptcha(e.target.value)}
-                autoComplete="off"
-              />
-              {captchaImg ? (
+              <Input value={captcha} onChange={(e) => setCaptcha(e.target.value)} />
+              {captchaImg && (
+
                 <img
                   src={captchaImg}
                   alt="captcha"
                   className="h-9 cursor-pointer rounded-md"
                   onClick={loadCaptcha}
-                  title={t("ClickToRefreshCaptcha")}
                 />
-              ) : (
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="shrink-0"
-                  onClick={loadCaptcha}
-                >
-                  {t("RefreshCaptcha")}
-                </Button>
               )}
             </div>
+
           </div>
 
-          <Button className="w-full" onClick={submit} disabled={loading}>
+          <Button className="w-full" onClick={submit}>
             {t("Send_Password_Reset_Email")}
           </Button>
+
         </div>
+
       </GlassPanel>
+
     </div>
+
   );
 }

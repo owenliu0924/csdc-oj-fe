@@ -25,7 +25,7 @@ pnpm dev
 | `OJ_BACKEND_URL` | OnlineJudge backend base URL (default `http://127.0.0.1:8080`) |
 | `NEXT_PUBLIC_APP_NAME` | Display name fallback |
 
-API requests to `/api/*` and `/public/*` are proxied to the backend via Next.js route handlers.
+API requests to `/api/*` and `/public/*` are proxied to the backend via `next.config.ts`.
 
 ## Scripts
 

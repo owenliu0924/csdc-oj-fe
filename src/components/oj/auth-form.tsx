@@ -10,7 +10,6 @@ import { Label } from "@/components/ui/label";
 import { useUserStore } from "@/stores/user";
 import { useWebsiteStore } from "@/stores/website";
 import ojApi from "@/lib/api/oj";
-import { parseCaptchaData } from "@/lib/captcha";
 import { Link } from "@/i18n/navigation";
 import { springSoft } from "@/lib/motion";
 
@@ -48,13 +47,14 @@ export function AuthForm({
   const loadCaptcha = async () => {
     try {
       const res = await ojApi.getCaptcha();
-      const { captchaKey: key, captchaImg: img } = parseCaptchaData(
-        res.data.data
-      );
-      setCaptchaKey(key);
-      setCaptchaImg(img);
+      const data = res.data.data as {
+        captcha_key: string;
+        captcha_image: string;
+      };
+      setCaptchaKey(data.captcha_key);
+      setCaptchaImg(data.captcha_image);
     } catch {
-      /* silent */
+
     }
   };
 
@@ -84,7 +84,7 @@ export function AuthForm({
       await getProfile();
       onSuccess?.();
     } catch {
-      /* handled by ajax */
+
     } finally {
       setLoading(false);
     }
@@ -95,10 +95,6 @@ export function AuthForm({
       toast.error(t("password_does_not_match"));
       return;
     }
-    if (!captcha.trim()) {
-      toast.error(t("CaptchaRequired"));
-      return;
-    }
     setLoading(true);
     try {
       await ojApi.register({
@@ -106,7 +102,7 @@ export function AuthForm({
         password,
         email,
         captcha,
-        ...(captchaKey ? { captcha_key: captchaKey } : {}),
+        captcha_key: captchaKey,
       });
       toast.success(t("Thanks_for_registering"));
       onModeChange?.("login");
@@ -171,6 +167,7 @@ export function AuthForm({
                   onKeyDown={(e) => e.key === "Enter" && handleLogin()}
                 />
               </motion.div>
+
             )}
           </AnimatePresence>
 
@@ -195,10 +192,13 @@ export function AuthForm({
                 >
                   {t("No_Account")}
                 </button>
+
               )}
             </div>
+
           )}
         </motion.div>
+
       ) : (
         <motion.div
           key="register"
@@ -254,27 +254,18 @@ export function AuthForm({
               <Input
                 value={captcha}
                 onChange={(e) => setCaptcha(e.target.value)}
-                autoComplete="off"
               />
-              {captchaImg ? (
+              {captchaImg && (
+
                 <img
                   src={captchaImg}
                   alt="captcha"
                   className="h-9 cursor-pointer rounded-lg border border-white/10"
                   onClick={loadCaptcha}
-                  title={t("ClickToRefreshCaptcha")}
                 />
-              ) : (
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="shrink-0"
-                  onClick={loadCaptcha}
-                >
-                  {t("RefreshCaptcha")}
-                </Button>
               )}
             </div>
+
           </div>
 
           <Button className="w-full" onClick={handleRegister} disabled={loading}>
@@ -289,9 +280,12 @@ export function AuthForm({
             >
               {t("Already_Registed")}
             </button>
+
           )}
         </motion.div>
+
       )}
     </AnimatePresence>
+
   );
 }
